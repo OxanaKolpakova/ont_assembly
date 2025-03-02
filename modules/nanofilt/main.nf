@@ -2,14 +2,16 @@ process NANOFILT {
     publishDir 'results/NANOFILT'
     tag "$reads"
     conda 'bioconda::nanofilt conda-forge::gzip'
+    container 'jdelling7igfl/nanofilt:2.8.0'
+    
     input:
-    path reads
+    tuple val(sid), path(reads)
 
     output:
-    path "${reads.simpleName}_trimmed.fastq.gz"
+    tuple val(sid), path("${sid}_filtered.fastq.gz")
     
     script:
     """
-    gunzip -c $reads | NanoFilt -q 10 -l 500 --headcrop 50 | gzip > ${reads.simpleName}_trimmed.fastq.gz
+    gunzip -c $reads | NanoFilt -q 10 -l 500 --headcrop 50 | gzip > ${sid}_filtered.fastq.gz
     """
 }

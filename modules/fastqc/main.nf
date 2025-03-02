@@ -2,12 +2,14 @@ process FASTQC {
     publishDir 'results/FASTQC'
     tag "$reads"
     conda 'bioconda::fastqc'
+    container 'staphb/fastqc:latest'
+    
     input:
-    path reads
+    tuple val(sid), path(reads)
 
     output:
-    path '*.zip', emit: zip
-    path '*.html', emit: html
+    tuple val(sid), path('*.zip'), emit: zip
+    tuple val(sid), path('*.html'), emit: html
     
     script:
     """

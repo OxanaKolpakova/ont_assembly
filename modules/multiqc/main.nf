@@ -1,7 +1,8 @@
 process MULTIQC {
     publishDir 'results/MULTIQC'
     tag 'all_samples'
-    conda 'bioconda::multiqc'
+    conda "${moduleDir}/environment.yml"
+    container 'staphb/multiqc:latest'
     input:
     path files
 
