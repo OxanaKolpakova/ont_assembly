@@ -12,6 +12,6 @@ process NANOFILT {
     
     script:
     """
-    gunzip -c $reads | NanoFilt -q 10 -l 500 --headcrop 50 | gzip > ${sid}_filtered.fastq.gz
+    gunzip -c $reads | NanoFilt -q 10 -l 50 --headcrop 50 | gzip > ${sid}_filtered.fastq.gz
     """
 }
