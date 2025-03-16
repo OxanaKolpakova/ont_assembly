@@ -1,8 +1,8 @@
 process MULTIQC {
     publishDir 'results/MULTIQC'
     tag 'all_samples'
-    conda "${moduleDir}/environment.yml"
-    container 'staphb/multiqc:latest'
+    //conda "${moduleDir}/environment.yml"
+    //container 'staphb/multiqc:latest'
     input:
     path files
 
@@ -11,6 +11,6 @@ process MULTIQC {
     
     script:
     """
-    multiqc . 
+    multiqc . -c ${moduleDir}/multiqc_config.yaml
     """
 }

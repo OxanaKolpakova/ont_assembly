@@ -1,10 +1,12 @@
 process FLYE {
     publishDir 'results/FLYE'
-    tag "$reads"
+    tag "$sid"
     conda 'bioconda::flye'
     container 'staphb/flye:2.9.5'
-    memory '6 GB'
-    
+    errorStrategy 'ignore'
+    cpus params.cpus
+
+       
     input:
     tuple val(sid), path(reads)
 
@@ -13,6 +15,6 @@ process FLYE {
     
     script:
     """
-    flye --nano-raw $reads --out-dir output_directory --genome-size 5m --threads 8 --asm-coverage 100
+    flye --nano-corr $reads --out-dir output_directory --genome-size 7m --threads ${task.cpus}
     """
 }

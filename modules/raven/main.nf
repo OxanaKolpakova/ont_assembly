@@ -1,9 +1,9 @@
 process RAVEN {
     publishDir 'results/RAVEN'
-    tag "$reads"
+    tag "$sid"
     conda 'bioconda::raven-assembler'
     container 'nanozoo/raven:1.5.0--9806f08'
-    
+    cpus params.cpus
     
     input:
     tuple val(sid), path(reads)
@@ -13,6 +13,6 @@ process RAVEN {
     
     script:
     """
-    raven --threads 8 --no-filter $reads > ${sid}.fasta
+    raven --threads ${task.cpus} --no-filter $reads > ${sid}.fasta
     """
 }

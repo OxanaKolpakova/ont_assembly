@@ -1,8 +1,9 @@
 process FASTQC {
     publishDir 'results/FASTQC'
-    tag "$reads"
+    tag "$sid"
     conda 'bioconda::fastqc'
     container 'staphb/fastqc:latest'
+    cpus params.cpus
     
     input:
     tuple val(sid), path(reads)
@@ -13,6 +14,6 @@ process FASTQC {
     
     script:
     """
-    fastqc $reads -t 2
+    fastqc $reads -t ${task.cpus}
     """
 }
