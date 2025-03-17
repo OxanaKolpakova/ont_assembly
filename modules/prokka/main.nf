@@ -10,8 +10,8 @@ process PROKKA {
     tuple val(sid), path(contigs)
 
     output:
-    tuple val(sid), path("${sid}_prokka")
-
+    tuple val(sid), path("${sid}_prokka")           , emit: prokka
+    tuple val(sid), path("${sid}_prokka/${sid}.gff"), emit: gff
     
     script:
     """
