@@ -11,10 +11,11 @@ process FLYE {
     tuple val(sid), path(reads)
 
     output:
-    path "*"
+    tuple val(sid), path("${sid}_flye.fasta")
     
     script:
     """
     flye --nano-corr $reads --out-dir output_directory --genome-size 7m --threads ${task.cpus}
+    mv output_directory/assembly.fasta ${sid}_flye.fasta
     """
 }

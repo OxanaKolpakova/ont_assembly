@@ -6,15 +6,14 @@ process CONCATENATE_FASTA {
     cpus params.cpus 
 
     input:
-    tuple val(sid), path(contigs_16S)
-    path(fasta_16S_8N)
-    path(fasta_16S_ss)
+    tuple val(sid), path(contig_16S)
+    path(all_16S)
 
     output:
     tuple val(sid), path("${sid}_16S_concatenate.fasta"), emit: fasta
        
     script:
     """
-    cat $contigs_16S $fasta_16S_8N $fasta_16S_ss > ${sid}_16S_concatenate.fasta
+    cat $contig_16S $all_16S > ${sid}_16S_concatenate.fasta
     """
 }
