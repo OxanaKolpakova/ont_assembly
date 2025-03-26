@@ -1,5 +1,5 @@
-process SAMTOOLS_INDEX {
-    publishDir 'results/SAMTOOLS_INDEX'
+process SAMTOOLS_SORT {
+    publishDir 'results/SAMTOOLS_SORT'
     tag "$sid"
     conda 'bioconda::samtools'
     container 'glebusasha/bwa_samtools:latest'
@@ -9,10 +9,10 @@ process SAMTOOLS_INDEX {
     tuple val(sid), path(bam) 
        
     output:
-    tuple val(sid), path("${bam.simpleName}.bam.bai")
+    tuple val(sid), path("${sid}_sorted.bam")
     
     script:
     """
-    samtools index $bam
+    samtools sort -o ${sid}_sorted.bam $bam 
     """
 }

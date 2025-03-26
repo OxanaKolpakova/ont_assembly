@@ -14,7 +14,7 @@ process GET_FASTA {
        
     script:
     """
-    grep -i "16S" $gff | awk '{print \$1 "\t" (\$4-1) "\t" \$5 "\t" \$9}' > ${sid}_16S.bed
+    grep -i "16S ribosomal RNA" $gff | awk '{print \$1 "\t" (\$4-1) "\t" \$5 "\t" \$9}' > ${sid}_16S.bed
     bedtools getfasta -fi "$contigs" -bed "${sid}_16S.bed" -fo "${sid}_16S_tmp.fasta"
     awk '/^>/ {split(\$0, a, ":"); print a[1] "_" ++i ":" a[2]; next} {print}' "${sid}_16S_tmp.fasta" > "${sid}_16S.fasta"
     """

@@ -3,7 +3,7 @@ process SAMTOOLS_FLAGSTAT {
     tag "$sid"
     conda 'bioconda::samtools'
     container 'glebusasha/bwa_samtools:latest'
-    //errorStrategy 'ignore'
+    errorStrategy 'ignore'
     cpus params.cpus
        
     input:
