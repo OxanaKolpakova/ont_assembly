@@ -29,12 +29,12 @@ include { TOP_HIT_BLAST                      } from './modules/local/top_hit_bla
 workflow {
     reads           = Channel.fromPath(params.reads).map {it -> [it.simpleName, it]}
     reference       = Channel.fromPath(params.reference).collect()
-    contig_16S_8N   = Channel.fromPath(params.contig_16S_8N).collect()
-    ssampsonii_16S  = Channel.fromPath(params.ssampsonii_16S).collect()
-    all_16S         = Channel.fromPath(params.all_16S).collect()
-    all_rnpB        = Channel.fromPath(params.all_rnpB).collect()
-    rnpB            = Channel.fromPath(params.rnpB).collect()
-    daidzeins       = Channel.fromPath(params.daidzeins)
+    //contig_16S_8N   = Channel.fromPath(params.contig_16S_8N).collect()
+    //ssampsonii_16S  = Channel.fromPath(params.ssampsonii_16S).collect()
+    //all_16S         = Channel.fromPath(params.all_16S).collect()
+    //all_rnpB        = Channel.fromPath(params.all_rnpB).collect()
+    //rnpB            = Channel.fromPath(params.rnpB).collect()
+    //daidzeins       = Channel.fromPath(params.daidzeins)
 
     SAMTOOLS_FAIDX(reference)
     FASTQC(reads)
@@ -47,7 +47,7 @@ workflow {
     SAMTOOLS_FLAGSTAT(SAMTOOLS_SORT.out.join(SAMTOOLS_INDEX.out))
     MEDAKA_CONSENSUS(SAMTOOLS_SORT.out.join(SAMTOOLS_INDEX.out), reference, SAMTOOLS_FAIDX.out)
     QUAST(MEDAKA_CONSENSUS.out)
-    BLAST(MEDAKA_CONSENSUS.out, contig_16S_8N)
+    /*BLAST(MEDAKA_CONSENSUS.out, contig_16S_8N)
     TOP_HIT_BLAST(BLAST.out.tsv.join(MEDAKA_CONSENSUS.out))
     CONCATENATE_FASTA(TOP_HIT_BLAST.out.fasta, all_rnpB)
     MAFFT(CONCATENATE_FASTA.out.fasta)
@@ -55,6 +55,7 @@ workflow {
     //IQTREE(MAFFT.out.multifasta, "CP121214.1_3255908-3256318")
     //IQTREE(MAFFT.out.multifasta, "AB184187.1") 16S their
     IQTREE(MAFFT.out.multifasta)
+    */
     MULTIQC(
         FASTQC.out.zip.map{it[1]}
             .mix(FASTQC_TRIMMED.out.zip.map{it[1]})
@@ -62,4 +63,5 @@ workflow {
             .mix(QUAST.out.map{it[1]})
             .collect()
         )
+    
 }
