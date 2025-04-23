@@ -4,7 +4,7 @@ process FASTQC {
     conda 'bioconda::fastqc'
     container 'staphb/fastqc:latest'
     cpus params.cpus
-    
+        
     input:
     tuple val(sid), path(reads)
 

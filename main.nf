@@ -25,6 +25,9 @@ include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_2 } from './modules/samtools/index/'
 include { CONCATENATE_ALL_FASTA              } from './modules/local/concatenate_all_fasta/'
 include { BLAST                              } from './modules/blast/'
 include { TOP_HIT_BLAST                      } from './modules/local/top_hit_blast'
+include { RED                                } from './modules/red/'
+include { FUNANNOTATE                        } from './modules/funannotate/'
+
 
 workflow {
     reads           = Channel.fromPath(params.reads).map {it -> [it.simpleName, it]}
@@ -47,7 +50,10 @@ workflow {
     SAMTOOLS_FLAGSTAT(SAMTOOLS_SORT.out.join(SAMTOOLS_INDEX.out))
     MEDAKA_CONSENSUS(SAMTOOLS_SORT.out.join(SAMTOOLS_INDEX.out), reference, SAMTOOLS_FAIDX.out)
     QUAST(MEDAKA_CONSENSUS.out)
-    /*BLAST(MEDAKA_CONSENSUS.out, contig_16S_8N)
+    RED(MEDAKA_CONSENSUS.out)
+    FUNANNOTATE(RED.out)
+    /*PROKKA(MEDAKA_CONSENSUS.out)
+    BLAST(MEDAKA_CONSENSUS.out, contig_16S_8N)
     TOP_HIT_BLAST(BLAST.out.tsv.join(MEDAKA_CONSENSUS.out))
     CONCATENATE_FASTA(TOP_HIT_BLAST.out.fasta, all_rnpB)
     MAFFT(CONCATENATE_FASTA.out.fasta)
@@ -61,6 +67,7 @@ workflow {
             .mix(FASTQC_TRIMMED.out.zip.map{it[1]})
             .mix(SAMTOOLS_FLAGSTAT.out.map{it[1]})
             .mix(QUAST.out.map{it[1]})
+            //.mix(PROKKA.out.prokka.map{it[1]})
             .collect()
         )
     
