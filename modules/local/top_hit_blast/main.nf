@@ -1,15 +1,15 @@
 process TOP_HIT_BLAST {
     publishDir 'results/TOP_HIT_BLAST'
-    tag "$sid"
+    tag "${r_sid}_${q_sid}"
     
     //errorStrategy 'ignore'
     cpus params.cpus 
 
     input:
-    tuple val(sid), path(blast_results), path(fasta)
+    tuple val(r_sid), val(q_sid), path(blast_results), path(fasta)
 
     output:
-    tuple val(sid), path("${sid}_top_hit.fasta"), emit: fasta
+    tuple val(r_sid), val(q_sid), path("${r_sid}_${q_sid}_top_hit.fasta"), emit: fasta
        
     script:
     """
@@ -17,6 +17,6 @@ process TOP_HIT_BLAST {
         head -n 1 |\
         awk '{if (\$9 < \$10) print \$2":"\$9"-"\$10; else print \$2":"\$10"-"\$9}' |\
         xargs samtools faidx $fasta |\
-        sed "s/^>.*\$/>${sid}/" > ${sid}_top_hit.fasta
+        sed "s/^>.*\$/>${r_sid}/" > ${r_sid}_${q_sid}_top_hit.fasta
     """
 }

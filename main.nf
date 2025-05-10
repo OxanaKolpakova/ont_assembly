@@ -24,14 +24,14 @@ include { BEDTOOLS_INTERSECT                 } from './modules/bedtools/intersec
 include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_2 } from './modules/samtools/index/'
 include { CONCATENATE_ALL_FASTA              } from './modules/local/concatenate_all_fasta/'
 include { BLAST                              } from './modules/blast/'
+include { ITSX                               } from './modules/itsx/'  
 include { TOP_HIT_BLAST                      } from './modules/local/top_hit_blast'
-include { RED                                } from './modules/red/'
-include { FUNANNOTATE                        } from './modules/funannotate/'
-
-
+include { LONG_HIT_BLAST                     } from './modules/local/long_hit_blast'
+    
 workflow {
     reads           = Channel.fromPath(params.reads).map {it -> [it.simpleName, it]}
     reference       = Channel.fromPath(params.reference).collect()
+    musroom_prot    = Channel.fromPath(params.musroom_prot).map {it -> [it.simpleName, it]}
     //contig_16S_8N   = Channel.fromPath(params.contig_16S_8N).collect()
     //ssampsonii_16S  = Channel.fromPath(params.ssampsonii_16S).collect()
     //all_16S         = Channel.fromPath(params.all_16S).collect()
@@ -50,16 +50,18 @@ workflow {
     SAMTOOLS_FLAGSTAT(SAMTOOLS_SORT.out.join(SAMTOOLS_INDEX.out))
     MEDAKA_CONSENSUS(SAMTOOLS_SORT.out.join(SAMTOOLS_INDEX.out), reference, SAMTOOLS_FAIDX.out)
     QUAST(MEDAKA_CONSENSUS.out)
-    RED(MEDAKA_CONSENSUS.out)
-    FUNANNOTATE(RED.out)
-    /*PROKKA(MEDAKA_CONSENSUS.out)
-    BLAST(MEDAKA_CONSENSUS.out, contig_16S_8N)
-    TOP_HIT_BLAST(BLAST.out.tsv.join(MEDAKA_CONSENSUS.out))
+    ITSX(MEDAKA_CONSENSUS.out)
+    BLAST(MEDAKA_CONSENSUS.out.combine(musroom_prot))
+    LONG_HIT_BLAST(BLAST.out.tsv.combine(MEDAKA_CONSENSUS.out, by: 0))
+
+    /*
+    TOP_HIT_BLAST(BLAST.out.tsv.combine(MEDAKA_CONSENSUS.out, by: 0))
+    PROKKA(MEDAKA_CONSENSUS.out)
     CONCATENATE_FASTA(TOP_HIT_BLAST.out.fasta, all_rnpB)
     MAFFT(CONCATENATE_FASTA.out.fasta)
-    //FAST_TREE(MAFFT.out.multifasta)
-    //IQTREE(MAFFT.out.multifasta, "CP121214.1_3255908-3256318")
-    //IQTREE(MAFFT.out.multifasta, "AB184187.1") 16S their
+    FAST_TREE(MAFFT.out.multifasta)
+    IQTREE(MAFFT.out.multifasta, "CP121214.1_3255908-3256318")
+    IQTREE(MAFFT.out.multifasta, "AB184187.1") 16S their
     IQTREE(MAFFT.out.multifasta)
     */
     MULTIQC(
