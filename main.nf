@@ -27,11 +27,22 @@ include { BLAST                              } from './modules/blast/'
 include { ITSX                               } from './modules/itsx/'  
 include { TOP_HIT_BLAST                      } from './modules/local/top_hit_blast'
 include { LONG_HIT_BLAST                     } from './modules/local/long_hit_blast'
+include { AUGUSTUS_TRAIN                     } from './modules/augustus/train/'
+include { AUGUSTUS_PREDICT                   } from './modules/augustus/predict/'
+include { FUNANNOTATE_PREDICT                } from './modules/funannotate/predict/'
+
+reads           = Channel.fromPath(params.reads).map {it -> [it.simpleName, it]}
+reference       = Channel.fromPath(params.reference).collect()
+musroom_prot    = Channel.fromPath(params.musroom_prot).map {it -> [it.simpleName, it]}
+species_name    = params.species_name
+augustus_train = Channel.fromPath(params.augustus_train).collect()
+workflow assembly_taxonomy {
+    take:
+    reads
+    reference
+    musroom_prot
     
-workflow {
-    reads           = Channel.fromPath(params.reads).map {it -> [it.simpleName, it]}
-    reference       = Channel.fromPath(params.reference).collect()
-    musroom_prot    = Channel.fromPath(params.musroom_prot).map {it -> [it.simpleName, it]}
+    main:
     //contig_16S_8N   = Channel.fromPath(params.contig_16S_8N).collect()
     //ssampsonii_16S  = Channel.fromPath(params.ssampsonii_16S).collect()
     //all_16S         = Channel.fromPath(params.all_16S).collect()
@@ -73,4 +84,25 @@ workflow {
             .collect()
         )
     
+    emit:
+    genome = MEDAKA_CONSENSUS.out
+}
+
+workflow annotation {
+    take:
+    species_name
+    //augustus_train
+    genome
+
+    main:
+    AUGUSTUS_TRAIN(species_name, augustus_train)
+    AUGUSTUS_PREDICT(species_name, genome, AUGUSTUS_TRAIN.out)
+    //FUNANNOTATE_PREDICT(AUGUSTUS_PREDICT.out, AUGUSTUS_TRAIN.out, species_name)
+    //FUNANNOTATE_PREDICT(species_name, genome, AUGUSTUS_TRAIN.out)
+   
+}
+workflow {
+    assembly_taxonomy(reads, reference, musroom_prot)
+    //annotation(species_name, augustus_train, assembly_taxonomy.out.genome)
+    annotation(species_name, assembly_taxonomy.out.genome)
 }
