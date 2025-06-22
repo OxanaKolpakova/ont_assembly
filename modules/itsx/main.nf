@@ -1,5 +1,4 @@
 process ITSX {
-    publishDir 'results/ITSX'
     tag "$sid"
     conda 'bioconda::itsx'
     container 'metashot/itsx:1.1.2-1'

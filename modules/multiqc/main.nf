@@ -1,5 +1,4 @@
 process MULTIQC {
-    publishDir 'results/MULTIQC'
     tag 'all_samples'
     //conda "${moduleDir}/environment.yml"
     //container 'staphb/multiqc:latest'

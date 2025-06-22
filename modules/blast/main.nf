@@ -1,5 +1,4 @@
 process BLAST {
-    publishDir 'results/BLAST'
     tag "$r_sid $q_sid"
     conda 'bioconda::blast'
     container 'staphb/blast:2.16.0'

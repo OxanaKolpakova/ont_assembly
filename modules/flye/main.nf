@@ -1,5 +1,4 @@
 process FLYE {
-    publishDir 'results/FLYE'
     tag "$sid"
     conda 'bioconda::flye'
     container 'staphb/flye:2.9.5'

@@ -1,5 +1,4 @@
 process AUGUSTUS_PREDICT {
-    publishDir 'results/AUGUSTUS_PREDICT'
     tag "$sid"
     conda 'bioconda::augustus'
     container 'nanozoo/augustus:3.3.3--ed97e98'

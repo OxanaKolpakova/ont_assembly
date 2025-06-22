@@ -1,5 +1,4 @@
 process FAST_TREE {
-    publishDir 'results/FAST_TREE'
     tag "$sid"
     conda 'bioconda::fasttree'
     container 'staphb/fasttree:2.1.11'

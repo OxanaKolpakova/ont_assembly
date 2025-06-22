@@ -1,5 +1,4 @@
 process AUGUSTUS_TRAIN {
-    publishDir 'results/AUGUSTUS_TRAIN'
     tag "$species_name"
     conda 'bioconda::augustus'
     container 'nanozoo/augustus:3.3.3--ed97e98'

@@ -1,32 +1,36 @@
 process FUNANNOTATE_PREDICT {
-    publishDir 'results/FUNANNOTATE_PREDICT'
     tag "$genome"
     
     conda 'bioconda::funannotate'
     container 'nextgenusfs/funannotate:v1.8.15  '
-    //errorStrategy 'ignore'
+    errorStrategy 'ignore'
     cpus params.cpus 
 
     input:
-    val species_name
     tuple val(sid), path(genome)
-    path species
+    val species_name
+    val strain_name
+    val busco_seed_species
+    path protein_alignments
+    path protein_evidence
+    path protein_evidence_2
   
     output:
-    path "predict_output"
+    tuple val(sid), path("${sid}_predict"), emit: predict_dir
+    tuple val(sid), path("${sid}_predict/predict_results/${species_name}*.gbk"), emit: gbk
+    tuple val(sid), path("${sid}_predict/predict_results/${species_name}*.proteins.fa"), emit: proteins
 
 
     script:
     """
-    export AUGUSTUS_CONFIG_PATH=\$PWD/augustus_config/
-    mkdir -p \$PWD/augustus_config/species 
-    # cp -r \$AUGUSTUS_CONFIG_PATH \$PWD/augustus_config/
-    # cp -r ${species} \$PWD/augustus_config/species/
-
     funannotate predict \
       -i $genome \
-      -o predict_output \
-      --species $species_name \
+      -o ${sid}_predict \
+      --species '$species_name' \
+      --strain '$strain_name' \
+      --busco_seed_species $busco_seed_species \
+      --protein_evidence $protein_evidence $protein_evidence_2 \
+      --optimize_augustus \
       --cpus ${task.cpus}
     """
     }

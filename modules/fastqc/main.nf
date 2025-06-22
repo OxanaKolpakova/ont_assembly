@@ -1,5 +1,4 @@
 process FASTQC {
-    publishDir 'results/FASTQC'
     tag "$sid"
     conda 'bioconda::fastqc'
     container 'staphb/fastqc:latest'

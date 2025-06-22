@@ -1,5 +1,4 @@
 process IQTREE {
-    publishDir 'results/IQTREE'
     tag "$sid"
     conda 'bioconda::iqtree'
     container 'staphb/iqtree:1.6.7'

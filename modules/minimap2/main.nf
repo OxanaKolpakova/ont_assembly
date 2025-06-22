@@ -1,5 +1,4 @@
 process MINIMAP2 {
-    publishDir 'results/MINIMAP2'
     tag "$sid"
     conda 'bioconda::minimap2'
     container 'staphb/minimap2:2.28'

@@ -1,5 +1,4 @@
 process BEDTOOLS_INTERSECT {
-    publishDir 'results/BEDTOOLS_INTERSECT'
     tag "$sid"
     conda 'bioconda::bedtools'
     container 'staphb/bedtools:2.31.1'

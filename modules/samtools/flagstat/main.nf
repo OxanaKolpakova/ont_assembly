@@ -1,5 +1,4 @@
 process SAMTOOLS_FLAGSTAT {
-    publishDir 'results/SAMTOOLS_FLAGSTAT'
     tag "$sid"
     conda 'bioconda::samtools'
     container 'glebusasha/bwa_samtools:latest'

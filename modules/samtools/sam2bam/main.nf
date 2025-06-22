@@ -1,5 +1,4 @@
 process SAMTOOLS_SAM2BAM {
-    publishDir 'results/SAMTOOLS_SAM2BAM'
     tag "$sid"
     conda 'bioconda::samtools'
     container 'glebusasha/bwa_samtools:latest'

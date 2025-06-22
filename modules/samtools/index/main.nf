@@ -1,5 +1,4 @@
 process SAMTOOLS_INDEX {
-    publishDir 'results/SAMTOOLS_INDEX'
     tag "$sid"
     conda 'bioconda::samtools'
     container 'glebusasha/bwa_samtools:latest'

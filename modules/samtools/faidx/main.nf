@@ -1,5 +1,4 @@
 process SAMTOOLS_FAIDX {
-    publishDir 'results/SAMTOOLS_FAIDX'
     tag "$reference"
     conda 'bioconda::samtools'
     container 'glebusasha/bwa_samtools:latest'

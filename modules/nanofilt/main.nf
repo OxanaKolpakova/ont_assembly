@@ -1,5 +1,4 @@
 process NANOFILT {
-    publishDir 'results/NANOFILT'
     tag "$sid"
     conda 'bioconda::nanofilt conda-forge::gzip'
     container 'jdelling7igfl/nanofilt:2.8.0'
