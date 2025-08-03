@@ -2,24 +2,19 @@ process FUNANNOTATE_IPRSCAN  {
     tag "$sid"
     
     conda 'bioconda::funannotate'
-    container 'nextgenusfs/funannotate:v1.8.15  '
+    container 'nextgenusfs/funannotate:v1.8.15'
     //errorStrategy 'ignore'
     cpus params.cpus 
 
     input:
-    tuple val(sid), path(fun_folder)
-
+    tuple val(sid), path(proteins)
+    path(interproscan)
   
     output:
-    tuple val(sid), path("${sid}_iprscan")
-
+    tuple val(sid), path(fun_folder), emit: predict_dir
 
     script:
     """
-    funannotate iprscan \
-      --input $fun_folder \
-      --methods singularity \
-      --cpus ${task.cpus} \
-      --out ${sid}_iprscan
+    interproscan-5.75-106.0/interproscan.sh -i $proteins
     """
     }

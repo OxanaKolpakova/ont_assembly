@@ -2,7 +2,7 @@ process FUNANNOTATE_MASK {
     tag "$genome"
     
     conda 'bioconda::funannotate'
-    container 'nextgenusfs/funannotate:v1.8.15  '
+    container 'nextgenusfs/funannotate:v1.8.15'
     errorStrategy 'ignore'
     cpus params.cpus 
 
