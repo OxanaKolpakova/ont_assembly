@@ -11,7 +11,7 @@ include { SAMTOOLS_VIEW                      } from '../modules/samtools/view/'
 include { MOSDEPTH                           } from '../modules/mosdepth/'
 include { MEDAKA_CONSENSUS                   } from '../modules/medaka/'
 
-workflow assembly_taxonomy_short {
+workflow assembly_taxonomy_long {
     take:
     reads
     reference
