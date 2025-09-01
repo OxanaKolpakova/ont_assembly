@@ -10,11 +10,12 @@ workflow assembly_taxonomy_hybrid {
     reads
     
     main:
-    FASTQC(reads)
-
+   
     long_reads    = reads.map{[it[0], it[1][0]]}
     short_reads   = reads.map{[it[0], it[1][1..2]]}
 
+    FASTQC(reads)
+    
     NANOFILT(long_reads)
     FASTP(short_reads)
     

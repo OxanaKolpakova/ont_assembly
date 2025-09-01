@@ -7,9 +7,7 @@ process FUNANNOTATE_PREDICT {
     cpus params.cpus 
 
     input:
-    tuple val(sid), path(genome)
-    val species_name
-    val strain_name
+    tuple val(sid), path(genome), val(species_name), val(strain_name)
     val busco_seed_species
     path protein_alignments
     path protein_evidence
@@ -17,8 +15,8 @@ process FUNANNOTATE_PREDICT {
   
     output:
     tuple val(sid), path("${sid}_predict"), emit: predict_dir
-    tuple val(sid), path("${sid}_predict/predict_results/${species_name}*.gbk"), emit: gbk
-    tuple val(sid), path("${sid}_predict/predict_results/${species_name}*.proteins.fa"), emit: proteins
+    tuple val(sid), path("${sid}_predict/predict_results/*.gbk"), emit: gbk
+    tuple val(sid), path("${sid}_predict/predict_results/*.proteins.fa"), emit: proteins
 
 
     script:

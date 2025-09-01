@@ -12,7 +12,6 @@ process ANTISMASH {
     tuple val(sid), path("${sid}_antismash"), emit: antismash_folder
     tuple val(sid), path("${sid}_antismash/${sid}.gbk"), emit: gbk
 
-    when:
     script:
     """
     antismash \

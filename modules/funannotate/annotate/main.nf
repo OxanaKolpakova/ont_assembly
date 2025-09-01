@@ -7,9 +7,7 @@ process FUNANNOTATE_ANNOTATE {
     cpus params.cpus 
 
     input:
-    val species_name
-    path template_file
-    tuple val(sid), path(fun_folder), path(antismash), path(emapper_annotations), path(phobius), path(signalp), path(iprscan)
+    tuple val(sid), val(species_name), path(template_file), path(fun_folder), path(antismash), path(emapper_annotations), path(phobius), path(signalp), path(iprscan)
 
     output:
     tuple val(sid), path("${fun_folder}/annotate_results"), emit: funannotate_annotate

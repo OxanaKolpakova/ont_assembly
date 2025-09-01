@@ -30,10 +30,11 @@ workflow assembly_taxonomy_long {
     MEDAKA_CONSENSUS(SAMTOOLS_SORT.out.join(SAMTOOLS_INDEX.out), reference, SAMTOOLS_FAIDX.out)
     
     emit:
-    fastqc              = FASTQC.out.zip
-    fastqc_trimmed      = FASTQC_TRIMMED.out.zip
-    samtools_flagstat   = SAMTOOLS_FLAGSTAT.out
-    genome              = MEDAKA_CONSENSUS.out
+    fastqc                = FASTQC.out.zip
+    fastqc_trimmed        = FASTQC_TRIMMED.out.zip
+    samtools_flagstat     = SAMTOOLS_FLAGSTAT.out
+    genome                = MEDAKA_CONSENSUS.out
+    bam                   = SAMTOOLS_SAM2BAM.out
     mosdepth_global_dist  = MOSDEPTH.out.global_dist
     mosdepth_summary      = MOSDEPTH.out.summary
 }

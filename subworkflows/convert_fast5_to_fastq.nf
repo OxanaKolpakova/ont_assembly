@@ -1,3 +1,4 @@
+include { POD5                  } from '../modules/pod5/'
 include { DORADO                } from '../modules/dorado/'
 
 workflow convert_fast5_to_fastq {
@@ -6,11 +7,9 @@ workflow convert_fast5_to_fastq {
     dorado_models
         
     main:
-    DORADO(fast5, dorado_models)
+    POD5(fast5)
+    DORADO(POD5.out, dorado_models)
 
-    /*
     emit:
-    quast   = QUAST.out
-    gff     = FUNANNOTATE_ANNOTATE.out.gff
-    */
+    fastq   = DORADO.out 
 }

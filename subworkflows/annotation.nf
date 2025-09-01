@@ -13,10 +13,7 @@ include { QUAST                              } from '../modules/quast/'
 
 workflow annotation {
     take:
-    genome
-    template_file
-    species_name
-    strain_name
+    genome_template_file_species_name_strain_name
     busco_seed_species
     protein_alignments
     protein_evidence
@@ -25,13 +22,17 @@ workflow annotation {
     interproscan
     
     main:
+    genome          = genome_template_file_species_name_strain_name.map {[it[0], it[1]]}
+    template_file   = genome_template_file_species_name_strain_name.map {[it[0], it[2]]}
+    species_name    = genome_template_file_species_name_strain_name.map {[it[0], it[3]]}
+    strain_name     = genome_template_file_species_name_strain_name.map {[it[0], it[4]]}
+
+
     FUNANNOTATE_CLEAN(genome)
     FUNANNOTATE_SORT(FUNANNOTATE_CLEAN.out)
     FUNANNOTATE_MASK(FUNANNOTATE_SORT.out)
     FUNANNOTATE_PREDICT(
-        FUNANNOTATE_MASK.out, 
-        species_name, 
-        strain_name, 
+        FUNANNOTATE_MASK.out.join(species_name).join(strain_name),
         busco_seed_species,
         protein_alignments,
         protein_evidence,
@@ -43,14 +44,14 @@ workflow annotation {
     EGGNOG_MAPPER(FUNANNOTATE_PREDICT.out.proteins, eggnog_proteins)
     INTERPROSCAN(FUNANNOTATE_PREDICT.out.proteins, interproscan)
     FUNANNOTATE_ANNOTATE(
-        species_name, 
-        template_file,
-        FUNANNOTATE_PREDICT.out.predict_dir
-            .join(ANTISMASH.out.gbk)
-            .join(EGGNOG_MAPPER.out.emapper_annotations)
-            .join(PHOBIUS.out)
-            .join(SIGNALP.out)
-            .join(INTERPROSCAN.out)
+        species_name
+        .join(template_file) 
+        .join(FUNANNOTATE_PREDICT.out.predict_dir)   
+        .join(ANTISMASH.out.gbk)
+        .join(EGGNOG_MAPPER.out.emapper_annotations)
+        .join(PHOBIUS.out)
+        .join(SIGNALP.out)
+        .join(INTERPROSCAN.out)
         )
     QUAST(FUNANNOTATE_MASK.out.join(FUNANNOTATE_ANNOTATE.out.gff))
     

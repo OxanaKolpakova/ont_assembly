@@ -5,10 +5,10 @@ process POD5 {
     cpus params.cpus 
 
     input:
-    path fast5
+    tuple val(sid), path(fast5)
 
     output:
-    path '*'
+    tuple val(sid), path("${sid}.pod5")
 
     script:
     """
@@ -16,7 +16,7 @@ process POD5 {
         --threads ${task.cpus} \
         --recursive \
         $fast5 \
-        --output .
+        --output ${sid}.pod5
     """
 
     stub:

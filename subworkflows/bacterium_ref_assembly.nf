@@ -1,8 +1,21 @@
+include { SAMTOOLS_FAIDX                  } from '../modules/samtools/faidx/'
+include { FASTQC                          } from '../modules/fastqc/'
+include { NANOFILT                        } from '../modules/nanofilt/'
+include { FASTQC as FASTQC_TRIMMED        } from '../modules/fastqc/'
+include { MINIMAP2                        } from '../modules/minimap2/'
+include { SAMTOOLS_SAM2BAM                } from '../modules/samtools/sam2bam'
+include { SAMTOOLS_SORT                   } from '../modules/samtools/sort'
+include { SAMTOOLS_INDEX                  } from '../modules/samtools/index'
+include { SAMTOOLS_FLAGSTAT               } from '../modules/samtools/flagstat'
+include { MEDAKA_CONSENSUS                } from '../modules/medaka'
+include { MULTIQC                         } from '../modules/multiqc'
+
+
 workflow bacterium_pipeline {
     take:
     reads
     reference
-    musroom_prot
+    //musroom_prot
     
     main:
     //contig_16S_8N   = Channel.fromPath(params.contig_16S_8N).collect()
