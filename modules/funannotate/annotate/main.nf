@@ -10,8 +10,10 @@ process FUNANNOTATE_ANNOTATE {
     tuple val(sid), val(species_name), path(template_file), path(fun_folder), path(antismash), path(emapper_annotations), path(phobius), path(signalp), path(iprscan)
 
     output:
-    tuple val(sid), path("${fun_folder}/annotate_results"), emit: funannotate_annotate
+    tuple val(sid), path("${fun_folder}/annotate_results")                      , emit: funannotate_annotate
     tuple val(sid), path("${fun_folder}/annotate_results/${species_name}*.gff3"), emit: gff
+    tuple val(sid), path("${fun_folder}/annotate_results/${species_name}*.gbk") , emit: gbk
+    tuple val(sid), path("${fun_folder}/annotate_results/${species_name}*.tbl") , emit: tbl
 
     script:
     """

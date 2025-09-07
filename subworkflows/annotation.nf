@@ -4,6 +4,7 @@ include { FUNANNOTATE_MASK                   } from '../modules/funannotate/mask
 include { FUNANNOTATE_PREDICT                } from '../modules/funannotate/predict/'
 include { FUNANNOTATE_ANTISMASH              } from '../modules/funannotate/antismash/'
 include { FUNANNOTATE_ANNOTATE               } from '../modules/funannotate/annotate/'
+include { FUNANNOTATE_FIX                    } from '../modules/funannotate/fix/'
 include { INTERPROSCAN                       } from '../modules/interproscan/'
 include { ANTISMASH                          } from '../modules/antismash/'
 include { PHOBIUS                            } from '../modules/phobius/'
@@ -53,6 +54,7 @@ workflow annotation {
         .join(SIGNALP.out)
         .join(INTERPROSCAN.out)
         )
+    FUNANNOTATE_FIX(FUNANNOTATE_ANNOTATE.out.gbk.join(FUNANNOTATE_ANNOTATE.out.tbl))
     QUAST(FUNANNOTATE_MASK.out.join(FUNANNOTATE_ANNOTATE.out.gff))
     
     emit:
